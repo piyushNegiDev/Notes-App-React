@@ -1,9 +1,9 @@
 import { ErrorMessage, Field, Formik, Form } from "formik";
-import { NavLink } from "react-router-dom";
 import { auth } from "../../firebase";
 import * as Yup from "yup";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const contactSchemValidation = Yup.object().shape({
   email: Yup.string().email("Invalid Email").required("Email is Required"),
@@ -13,29 +13,36 @@ const contactSchemValidation = Yup.object().shape({
 });
 
 const Login = () => {
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  const navigateToSignUp = () => {
+    navigate("/");
+  };
 
   const handleLogin = async ({ email, password }) => {
     try {
+      setLoading(true);
       await signInWithEmailAndPassword(auth, email, password);
-      navigate("/test");
+      navigate("/dashboard", { state: { from: "loginPage" } });
       console.log("successfully");
     } catch (error) {
       console.log(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="max-w-75">
+    <div className="max-w-100">
       <Formik
         validationSchema={contactSchemValidation}
         initialValues={{
           email: "",
           password: "",
         }}
-        onSubmit={(values) => {
-          //   console.log(values);
-          handleLogin(values);
+        onSubmit={async (values) => {
+          await handleLogin(values);
         }}
       >
         <Form className="flex flex-col gap-4">
@@ -66,10 +73,19 @@ const Login = () => {
           </div>
 
           <button
+            disabled={loading}
             type="submit"
-            className="bg-orange self-end border px-3 py-1.5"
+            className="border px-3 py-1.5"
           >
-            Login into an account
+            {loading ? "Loading..." : "Login"}
+          </button>
+
+          <button
+            type="button"
+            onClick={navigateToSignUp}
+            className="border px-3 py-1.5"
+          >
+            Create new account
           </button>
         </Form>
       </Formik>

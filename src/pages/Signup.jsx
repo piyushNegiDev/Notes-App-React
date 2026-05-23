@@ -1,6 +1,7 @@
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../../firebase";
 import { ErrorMessage, Field, Form, Formik } from "formik";
+import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 
 const contactSchemValidation = Yup.object().shape({
@@ -12,6 +13,7 @@ const contactSchemValidation = Yup.object().shape({
 });
 
 const Signup = () => {
+  const navigate = useNavigate();
   const handleSignup = async ({ name, email, password }) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(
@@ -22,11 +24,16 @@ const Signup = () => {
       await updateProfile(userCredential.user, {
         displayName: name,
       });
+      navigate("/dashboard", { state: { from: "signUpPage" } });
       console.log(userCredential.user);
       alert("Account Created");
     } catch (error) {
       console.log(error.message);
     }
+  };
+
+  const navigateToLogin = () => {
+    navigate("/login");
   };
 
   return (
@@ -38,9 +45,8 @@ const Signup = () => {
           email: "",
           password: "",
         }}
-        onSubmit={(values) => {
-          //   console.log(values);
-          handleSignup(values);
+        onSubmit={async (values) => {
+          await handleSignup(values);
         }}
       >
         <Form className="flex flex-col gap-4">
@@ -82,11 +88,16 @@ const Signup = () => {
             </div>
           </div>
 
+          <button type="submit" className="border px-3 py-1.5">
+            Create new account
+          </button>
+
           <button
-            type="submit"
-            className="bg-orange self-end border px-3 py-1.5"
+            type="button"
+            onClick={navigateToLogin}
+            className="border px-3 py-1.5"
           >
-            Create an account
+            Login
           </button>
         </Form>
       </Formik>
