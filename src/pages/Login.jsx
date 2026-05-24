@@ -1,7 +1,7 @@
 import { ErrorMessage, Field, Formik, Form } from "formik";
 import { auth } from "../../firebase";
 import * as Yup from "yup";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
@@ -23,8 +23,33 @@ const Login = () => {
   const handleLogin = async ({ email, password }) => {
     try {
       setLoading(true);
+
+      //   const userCredential =
       await signInWithEmailAndPassword(auth, email, password);
-      navigate("/dashboard", { state: { from: "loginPage" } });
+
+      // Refresh latest user data
+      await auth.currentUser.reload();
+
+      // Updated user
+      const updatedUser = auth.currentUser;
+
+      if (!updatedUser.emailVerified) {
+        await signOut(auth);
+
+        alert("Please verify your email first");
+        alert(
+          `Check spam/promotions folder if you don't receive the verification email.`,
+        );
+
+        return;
+      }
+
+      navigate("/dashboard", {
+        state: {
+          from: "loginPage",
+        },
+      });
+
       console.log("successfully");
     } catch (error) {
       console.log(error.message);

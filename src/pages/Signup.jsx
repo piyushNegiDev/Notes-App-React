@@ -1,10 +1,15 @@
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  signOut,
+  updateProfile,
+} from "firebase/auth";
+import { sendEmailVerification } from "firebase/auth";
 import { auth } from "../../firebase";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 
-const contactSchemValidation = Yup.object().shape({
+const noteDataValidation = Yup.object().shape({
   name: Yup.string().required("Name is Required"),
   email: Yup.string().email("Invalid Email").required("Email is Required"),
   password: Yup.string()
@@ -21,14 +26,25 @@ const Signup = () => {
         email,
         password,
       );
+
       await updateProfile(userCredential.user, {
         displayName: name,
       });
-      navigate("/dashboard", { state: { from: "signUpPage" } });
-      console.log(userCredential.user);
-      alert("Account Created");
+
+      await sendEmailVerification(userCredential.user);
+
+      // Logout unverified user
+      await signOut(auth);
+
+      alert(
+        "Account created successfully. Please verify your email before logging in.",
+      );
+
+      navigate("/login");
     } catch (error) {
-      console.log(error.message);
+      if (error.code === "auth/email-already-in-use") {
+        alert("Email already exists");
+      }
     }
   };
 
@@ -39,7 +55,7 @@ const Signup = () => {
   return (
     <div className="max-w-75">
       <Formik
-        validationSchema={contactSchemValidation}
+        validationSchema={noteDataValidation}
         initialValues={{
           name: "",
           email: "",

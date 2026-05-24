@@ -1,58 +1,62 @@
 import { useLocation } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/useAuth";
 import { signOut } from "firebase/auth";
 import { auth, db } from "../../firebase";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
-  addDoc,
   collection,
-  getDocs,
+  deleteDoc,
+  doc,
   onSnapshot,
-  serverTimestamp,
+  orderBy,
+  query,
+  where,
 } from "firebase/firestore";
+import Modal from "../components/Modal";
+import Notes from "../components/Notes";
 
 const Dashboard = () => {
   const [notes, setNotes] = useState([]);
-  const navigate = useNavigate();
   const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const [updatingNote, setUpdatingNote] = useState("");
+  const [isUpdating, setIsUpdating] = useState(false);
+
+  const onOpen = () => {
+    setIsOpen(true);
+  };
+
+  const onClose = () => {
+    setIsOpen(false);
+  };
 
   useEffect(() => {
-    const getNotes = async () => {
-      try {
-        const notesRef = collection(db, "notes");
+    // const notesRef = collection(db, "notes");
+    const notesRef = query(
+      collection(db, "notes"),
+      where("userId", "==", user.uid),
+      orderBy("updatedAt", "desc"),
+    );
 
-        // const notesSnapshot = await getDocs(notesRef);
+    const unsubscribe = onSnapshot(notesRef, (snapshot) => {
+      const notesData = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setNotes(notesData);
+      console.log(notesData);
+    });
 
-        onSnapshot(notesRef, (snapshot) => {
-          const notesData = snapshot.docs
-            .map((doc) => ({
-              id: doc.id,
-              ...doc.data(),
-            }))
-            .filter((note) => {
-              return note.userId === user.uid;
-            });
-
-          setNotes(notesData);
-        });
-      } catch (error) {
-        console.log(error.message);
-      }
-    };
-
-    getNotes();
+    return () => unsubscribe();
   }, [user.uid]);
 
-  const addNote = async () => {
+  const deleteNote = async (id) => {
     try {
-      const notesRef = collection(db, "notes");
-      await addDoc(notesRef, {
-        title: "test note 3",
-        description: "test note 3 description",
-        userId: user.uid,
-        createdAt: serverTimestamp(),
-      });
+      await deleteDoc(doc(db, "notes", id));
     } catch (error) {
       console.log(error.message);
     }
@@ -67,33 +71,75 @@ const Dashboard = () => {
   const fromPage = location.state?.from;
 
   return (
-    <div>
-      <p>
-        {user ? (
-          <span>Welcome {user?.displayName}</span>
-        ) : (
-          <span>Not Logged In</span>
-        )}
-      </p>
+    <>
+      <div>
+        <p>
+          {user ? (
+            <span>Welcome {user?.displayName}</span>
+          ) : (
+            <span>Not Logged In</span>
+          )}
+        </p>
 
-      <p>You came from: {fromPage || "Direct Link"}</p>
+        <p>You came from: {fromPage || "Direct Link"}</p>
 
-      <button onClick={handleLogout}>Logout</button>
-      <button onClick={addNote} className="border ml-10">
-        Add test note 3
-      </button>
+        <button onClick={handleLogout}>Logout</button>
+        <button
+          onClick={() => {
+            setIsUpdating(false);
+            onOpen();
+          }}
+          className="border ml-10"
+        >
+          Add Note
+        </button>
 
-      <div className="">
-        {notes?.map((note) => (
-          <div key={note.id}>
-            <p>{note.title}</p>
-            <p>{note.description}</p>
-            <p>{note.createdAt?.toDate().toLocaleString()}</p>
-          </div>
-        ))}
-        {/* {console.log(notes[0]?.id)} */}
+        <div className="">
+          {notes?.map((note) => (
+            // <div key={note.id}>
+            //   <p>{note.title}</p>
+            //   <p>{note.content}</p>
+            //   <p>{note.createdAt?.toDate().toLocaleString()}</p>
+            //   <button
+            //     className="border mb-10"
+            //     onClick={() => {
+            //       if (confirm("Delete this note?")) {
+            //         deleteNote(note.id);
+            //       }
+            //     }}
+            //   >
+            //     Delete Note
+            //   </button>
+            //   <button
+            //     className="border ml-5"
+            //     onClick={() => {
+            //       onOpen();
+            //       setIsUpdating(true);
+            //       setUpdatingNote(note);
+            //     }}
+            //   >
+            //     Update Note
+            //   </button>
+            // </div>
+            <Notes
+              key={note.id}
+              note={note}
+              onOpen={onOpen}
+              deleteNote={deleteNote}
+              setIsUpdating={setIsUpdating}
+              setUpdatingNote={setUpdatingNote}
+            ></Notes>
+          ))}
+        </div>
       </div>
-    </div>
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        user={user}
+        isUpdating={isUpdating}
+        updatingNote={updatingNote}
+      ></Modal>
+    </>
   );
 };
 
