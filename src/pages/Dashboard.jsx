@@ -1,58 +1,18 @@
-import { useLocation } from "react-router-dom";
-import { useAuth } from "../context/useAuth";
 import { signOut } from "firebase/auth";
 import { auth, db } from "../../firebase";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import {
-  collection,
-  deleteDoc,
-  doc,
-  onSnapshot,
-  orderBy,
-  query,
-  where,
-} from "firebase/firestore";
+import { useContext } from "react";
+import { deleteDoc, doc } from "firebase/firestore";
 import Modal from "../components/Modal";
 import Notes from "../components/Notes";
+import ZeroNotesMessage from "../components/ZeroNotesMessage";
+import Header from "../components/Header";
+import { AppContext } from "../context/AppContext";
 
 const Dashboard = () => {
-  const [notes, setNotes] = useState([]);
-  const { user } = useAuth();
   const navigate = useNavigate();
-
-  const [isOpen, setIsOpen] = useState(false);
-
-  const [updatingNote, setUpdatingNote] = useState("");
-  const [isUpdating, setIsUpdating] = useState(false);
-
-  const onOpen = () => {
-    setIsOpen(true);
-  };
-
-  const onClose = () => {
-    setIsOpen(false);
-  };
-
-  useEffect(() => {
-    // const notesRef = collection(db, "notes");
-    const notesRef = query(
-      collection(db, "notes"),
-      where("userId", "==", user.uid),
-      orderBy("updatedAt", "desc"),
-    );
-
-    const unsubscribe = onSnapshot(notesRef, (snapshot) => {
-      const notesData = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setNotes(notesData);
-      console.log(notesData);
-    });
-
-    return () => unsubscribe();
-  }, [user.uid]);
+  const { notes, setUpdatingNote, setIsUpdating, onOpen } =
+    useContext(AppContext);
 
   const deleteNote = async (id) => {
     try {
@@ -67,60 +27,31 @@ const Dashboard = () => {
     navigate("/login");
   };
 
-  const location = useLocation();
-  const fromPage = location.state?.from;
-
   return (
     <>
-      <div>
-        <p>
-          {user ? (
-            <span>Welcome {user?.displayName}</span>
+      <div className="text-text space-y-8">
+        <Header></Header>
+
+        <div>
+          {notes.length === 0 ? (
+            <ZeroNotesMessage
+              onOpen={onOpen}
+              setIsUpdating={setIsUpdating}
+            ></ZeroNotesMessage>
           ) : (
-            <span>Not Logged In</span>
+            ""
           )}
-        </p>
+        </div>
 
-        <p>You came from: {fromPage || "Direct Link"}</p>
-
-        <button onClick={handleLogout}>Logout</button>
         <button
-          onClick={() => {
-            setIsUpdating(false);
-            onOpen();
-          }}
-          className="border ml-10"
+          className="fixed bottom-10 right-10 bg-danger px-4 py-2 rounded-xl"
+          onClick={handleLogout}
         >
-          Add Note
+          Logout
         </button>
 
-        <div className="">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-5">
           {notes?.map((note) => (
-            // <div key={note.id}>
-            //   <p>{note.title}</p>
-            //   <p>{note.content}</p>
-            //   <p>{note.createdAt?.toDate().toLocaleString()}</p>
-            //   <button
-            //     className="border mb-10"
-            //     onClick={() => {
-            //       if (confirm("Delete this note?")) {
-            //         deleteNote(note.id);
-            //       }
-            //     }}
-            //   >
-            //     Delete Note
-            //   </button>
-            //   <button
-            //     className="border ml-5"
-            //     onClick={() => {
-            //       onOpen();
-            //       setIsUpdating(true);
-            //       setUpdatingNote(note);
-            //     }}
-            //   >
-            //     Update Note
-            //   </button>
-            // </div>
             <Notes
               key={note.id}
               note={note}
@@ -132,13 +63,7 @@ const Dashboard = () => {
           ))}
         </div>
       </div>
-      <Modal
-        isOpen={isOpen}
-        onClose={onClose}
-        user={user}
-        isUpdating={isUpdating}
-        updatingNote={updatingNote}
-      ></Modal>
+      <Modal></Modal>
     </>
   );
 };

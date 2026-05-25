@@ -10,10 +10,13 @@ import { createPortal } from "react-dom";
 import { RxCross2 } from "react-icons/rx";
 import { db } from "../../firebase";
 import * as Yup from "yup";
-// import { useState } from "react";
+import { toast } from "react-toastify";
+import { AppContext } from "../context/AppContext";
+import { useContext } from "react";
 
-const Modal = ({ isOpen, onClose, user, isUpdating, updatingNote }) => {
-//   const [loading, setLoading] = useState(false);
+const Modal = () => {
+  const { isOpen, onClose, user, isUpdating, updatingNote } =
+    useContext(AppContext);
 
   const noteDataValidation = Yup.object().shape({
     title: Yup.string().required("Title is required"),
@@ -31,6 +34,7 @@ const Modal = ({ isOpen, onClose, user, isUpdating, updatingNote }) => {
         updatedAt: serverTimestamp(),
       });
       onClose();
+      toast.success("Note Added Successfully");
     } catch (error) {
       console.log(error.message);
     }
@@ -44,6 +48,7 @@ const Modal = ({ isOpen, onClose, user, isUpdating, updatingNote }) => {
         updatedAt: serverTimestamp(),
       });
       onClose();
+      toast.success("Note Updated Successfully");
     } catch (error) {
       console.log(error.message);
     }
@@ -52,7 +57,7 @@ const Modal = ({ isOpen, onClose, user, isUpdating, updatingNote }) => {
   return createPortal(
     <>
       {isOpen && (
-        <div className="fixed inset-0 backdrop-blur-sm flex items-center">
+        <div className="text-text fixed inset-0 backdrop-blur-sm flex items-center">
           <Formik
             validationSchema={noteDataValidation}
             initialValues={
@@ -70,14 +75,19 @@ const Modal = ({ isOpen, onClose, user, isUpdating, updatingNote }) => {
               isUpdating ? updateNote(values) : addNote(values);
             }}
           >
-            <Form className="max-w-150 flex flex-col gap-6 mx-auto flex-1 bg-gray-300 p-5 rounded-lg">
-              <RxCross2
-                onClick={() => {
-                  onClose();
-                }}
-                className="text-black text-2xl ml-auto"
-              />
-              <div className="flex flex-col relative">
+            <Form className="max-w-150 bg-surface-secondary flex flex-col gap-6 mx-auto flex-1 p-5 rounded-lg">
+              <div className="flex justify-between items-center">
+                <p className="text-2xl">
+                  {isUpdating ? "Update Note" : "Add Note"}
+                </p>
+                <RxCross2
+                  onClick={() => {
+                    onClose();
+                  }}
+                  className="text-text text-2xl"
+                />
+              </div>
+              <div className="flex flex-col relative gap-1">
                 <label htmlFor="title">Title</label>
                 <Field
                   placeholder="Enter note title..."
@@ -90,7 +100,7 @@ const Modal = ({ isOpen, onClose, user, isUpdating, updatingNote }) => {
                 </div>
               </div>
 
-              <div className="flex flex-col relative">
+              <div className="flex flex-col relative gap-1">
                 <label htmlFor="content">Content</label>
                 <Field
                   placeholder="Write your note here..."

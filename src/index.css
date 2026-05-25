@@ -1,6 +1,56 @@
 @import "tailwindcss";
 
 @theme {
+  /* Backgrounds */
+  --color-bg: #f5f7fb;
+  --color-surface: #ffffff;
+  --color-surface-secondary: #eef2ff;
+
+  /* Text */
+  --color-text: #111827;
+  --color-text-secondary: #6b7280;
+
+  /* Brand */
+  --color-primary: #6366f1;
+  --color-primary-hover: #4f46e5;
+
+  /* Borders */
+  --color-border: #dbe1ea;
+
+  /* Status */
+  --color-danger: #ef4444;
+  --color-success: #22c55e;
+
+  /* Shadow */
+  --shadow-color: rgba(15, 23, 42, 0.08);
+}
+
+.dark {
+  /* Backgrounds */
+  --color-bg: #0f172a;
+  --color-surface: #1e293b;
+  --color-surface-secondary: #334155;
+
+  /* Text */
+  --color-text: #f8fafc;
+  --color-text-secondary: #94a3b8;
+
+  /* Brand */
+  --color-primary: #818cf8;
+  --color-primary-hover: #6366f1;
+
+  /* Borders */
+  --color-border: #334155;
+
+  /* Status */
+  --color-danger: #f87171;
+  --color-success: #4ade80;
+
+  /* Shadow */
+  --shadow-color: rgba(0, 0, 0, 0.3);
+}
+
+/* @theme {
   --brand-color: #8b90ff;
   --base-color: #f2f4f8;
   --surface-color: #fff;
@@ -28,4 +78,4 @@
   --secondary-text-color: #b0b3c0;
   --base-transparent-90: rgba(30, 31, 38, 0.9);
   --base-transparent-100: rgba(30, 31, 38, 1);
-}
+} */

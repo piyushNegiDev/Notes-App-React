@@ -49,8 +49,6 @@ const Login = () => {
           from: "loginPage",
         },
       });
-
-      console.log("successfully");
     } catch (error) {
       console.log(error.message);
     } finally {
@@ -59,61 +57,73 @@ const Login = () => {
   };
 
   return (
-    <div className="max-w-100">
-      <Formik
-        validationSchema={contactSchemValidation}
-        initialValues={{
-          email: "",
-          password: "",
-        }}
-        onSubmit={async (values) => {
-          await handleLogin(values);
-        }}
-      >
-        <Form className="flex flex-col gap-4">
-          <div className="flex flex-col gap-1">
-            <label htmlFor="email">Email</label>
-            <Field
-              placeholder="example@gmail.com"
-              type="email"
-              name="email"
-              className="h-10 rounded border px-3"
-            />
-            <div className="text-xs text-red-500">
-              <ErrorMessage name="email" />
+    <div className="max-w-220 mx-auto">
+      <h1 className="bg-surface p-3 text-center rounded-2xl font-semibold text-2xl mb-10 text-primary">
+        Log into <span className="hover:text-primary-hover">SnapNotes</span>
+      </h1>
+      <div className="grid md:grid-cols-[1.2fr_0.7fr] items-center gap-10 bg-surface-secondary px-5 py-10 rounded-2xl">
+        <div>
+          <img className="rounded-xl" src="/notes-image.avif" alt="" />
+        </div>
+        <Formik
+          validationSchema={contactSchemValidation}
+          initialValues={{
+            email: "",
+            password: "",
+          }}
+          onSubmit={async (values) => {
+            await handleLogin(values);
+          }}
+        >
+          <Form className="flex flex-col gap-6 text-text">
+            <div className="flex flex-col gap-1 relative">
+              <label htmlFor="email" className="text-lg">
+                Email
+              </label>
+              <Field
+                placeholder="example@gmail.com"
+                type="email"
+                name="email"
+                className="h-10 rounded-lg border px-3"
+              />
+              <div className="text-xs text-red-500 absolute -bottom-4">
+                <ErrorMessage name="email" />
+              </div>
             </div>
-          </div>
 
-          <div className="flex flex-col gap-1">
-            <label htmlFor="password">Password</label>
-            <Field
-              placeholder="********"
-              type="password"
-              name="password"
-              className="h-10 rounded border px-3"
-            />
-            <div className="text-xs text-red-500">
-              <ErrorMessage name="password" />
+            <div className="flex flex-col gap-1 relative mb-5">
+              <label htmlFor="password" className="text-lg">
+                Password
+              </label>
+              <Field
+                placeholder="********"
+                type="password"
+                name="password"
+                className="h-10 rounded-lg border px-3"
+              />
+              <div className="text-xs text-red-500 absolute -bottom-4">
+                <ErrorMessage name="password" />
+              </div>
             </div>
-          </div>
 
-          <button
-            disabled={loading}
-            type="submit"
-            className="border px-3 py-1.5"
-          >
-            {loading ? "Loading..." : "Login"}
-          </button>
+            <button
+              disabled={loading}
+              type="submit"
+              className="rounded-lg border px-3 py-1.5"
+            >
+              {loading ? "Loading..." : "Log in"}
+            </button>
 
-          <button
-            type="button"
-            onClick={navigateToSignUp}
-            className="border px-3 py-1.5"
-          >
-            Create new account
-          </button>
-        </Form>
-      </Formik>
+            <button
+              type="button"
+              onClick={navigateToSignUp}
+              className="rounded-lg border px-3 py-1.5"
+            >
+              Create new account
+            </button>
+          </Form>
+        </Formik>
+      </div>
     </div>
   );
 };
