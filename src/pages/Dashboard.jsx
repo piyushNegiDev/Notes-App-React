@@ -43,13 +43,6 @@ const Dashboard = () => {
           )}
         </div>
 
-        <button
-          className="fixed bottom-10 right-10 bg-danger px-4 py-2 rounded-xl"
-          onClick={handleLogout}
-        >
-          Logout
-        </button>
-
         <div className="grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-5">
           {notes?.map((note) => (
             <Notes
@@ -62,6 +55,13 @@ const Dashboard = () => {
             ></Notes>
           ))}
         </div>
+
+        <button
+          className="fixed bottom-10 right-10 bg-danger px-4 py-2 rounded-xl"
+          onClick={handleLogout}
+        >
+          Logout
+        </button>
       </div>
       <Modal></Modal>
     </>

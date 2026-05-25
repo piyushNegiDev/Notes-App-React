@@ -3,14 +3,21 @@ import { WiDaySunny } from "react-icons/wi";
 import { MdModeNight } from "react-icons/md";
 import { AppContext } from "../context/AppContext";
 import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const { user, onOpen, setIsUpdating, theme, toggleTheme } =
     useContext(AppContext);
+  const navigate = useNavigate();
 
   return (
     <header className="flex justify-between items-center">
-      <h1 className="text-5xl font-semibold text-primary hover:text-primary-hover">
+      <h1
+        onClick={() => {
+          navigate("/dashboard");
+        }}
+        className="text-5xl font-semibold text-primary hover:text-primary-hover cursor-pointer"
+      >
         SnapShot
       </h1>
       <div className="flex gap-5">

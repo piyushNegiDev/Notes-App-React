@@ -1,14 +1,18 @@
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-import { doc, getDoc, onSnapshot } from "firebase/firestore";
+import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../firebase";
 import Header from "./Header";
 import Modal from "./Modal";
 import { MdDelete, MdUpdate } from "react-icons/md";
 import { AppContext } from "../context/AppContext";
+import { useCURD } from "../hooks/useCURD";
+import { IoMdArrowRoundBack } from "react-icons/io";
 
 const SingleNote = () => {
+  const navigate = useNavigate();
+  const { confirmDelete } = useCURD();
   const { id } = useParams();
   const { onOpen, setIsUpdating, setUpdatingNote } = useContext(AppContext);
   const [note, setNote] = useState(null);
@@ -34,12 +38,16 @@ const SingleNote = () => {
     return <h1>Loading...</h1>;
   }
 
+  console.log(note);
+
   return (
     <>
       <div className="text-text space-y-8">
         <Header></Header>
-        <div>
-          <h1 className="text-4xl font-bold">{note.title}</h1>
+        <div className="bg-surface rounded-xl p-5">
+          <h1 onClick={() => {}} className="text-4xl font-bold">
+            {note.title}
+          </h1>
 
           <p className="mt-5 text-lg">{note.content}</p>
 
@@ -69,6 +77,21 @@ const SingleNote = () => {
               </button>
             </div>
           </div>
+        </div>
+        <div className="fixed bottom-10 right-10 flex gap-5">
+          <button className="text-xl">
+            <IoMdArrowRoundBack
+              onClick={() => {
+                navigate("/dashboard");
+              }}
+            />
+          </button>
+          <button
+            className="bg-danger px-4 py-2 rounded-xl"
+            //   onClick={handleLogout}
+          >
+            Logout
+          </button>
         </div>
       </div>
       <Modal></Modal>
