@@ -4,11 +4,11 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { sendEmailVerification } from "firebase/auth";
-import { auth } from "../../firebase";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
+import { auth } from "../config/firebase";
 
 const noteDataValidation = Yup.object().shape({
   name: Yup.string().required("Name is Required"),

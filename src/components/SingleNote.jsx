@@ -8,7 +8,6 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import { db } from "../../firebase";
 import Header from "./Header";
 import Modal from "./Modal";
 import { MdDelete, MdUpdate } from "react-icons/md";
@@ -17,6 +16,7 @@ import { useCRUD } from "../hooks/useCRUD";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { toast } from "react-toastify";
 import LogoutBtn from "./LogoutBtn";
+import { db } from "../config/firebase";
 
 const SingleNote = () => {
   const navigate = useNavigate();

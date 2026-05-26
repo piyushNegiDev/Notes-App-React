@@ -1,10 +1,10 @@
 import { ErrorMessage, Field, Formik, Form } from "formik";
-import { auth } from "../../firebase";
 import * as Yup from "yup";
 import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { auth } from "../config/firebase";
 
 const contactSchemValidation = Yup.object().shape({
   email: Yup.string().email("Invalid Email").required("Email is Required"),

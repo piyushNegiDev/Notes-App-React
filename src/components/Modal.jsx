@@ -8,7 +8,7 @@ import {
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { createPortal } from "react-dom";
 import { RxCross2 } from "react-icons/rx";
-import { db } from "../../firebase";
+import { db } from "../config/firebase";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import { AppContext } from "../context/AppContext";

@@ -6,8 +6,8 @@ import {
   where,
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { db } from "../../firebase";
 import { useAuth } from "../context/useAuth";
+import { db } from "../config/firebase";
 
 export function useAppData() {
   const { user } = useAuth();

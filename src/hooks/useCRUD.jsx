@@ -1,7 +1,7 @@
 import { deleteDoc, doc } from "firebase/firestore";
 import { toast } from "react-toastify";
-import { db } from "../../firebase";
 import { useNavigate } from "react-router-dom";
+import { db } from "../config/firebase";
 
 export const useCRUD = () => {
   const navigate = useNavigate();
