@@ -1,6 +1,4 @@
-import { signOut } from "firebase/auth";
-import { auth, db } from "../../firebase";
-import { useNavigate } from "react-router-dom";
+import { db } from "../../firebase";
 import { useContext } from "react";
 import { deleteDoc, doc } from "firebase/firestore";
 import Modal from "../components/Modal";
@@ -9,9 +7,9 @@ import ZeroNotesMessage from "../components/ZeroNotesMessage";
 import Header from "../components/Header";
 import { AppContext } from "../context/AppContext";
 import { toast } from "react-toastify";
+import LogoutBtn from "../components/LogoutBtn";
 
 const Dashboard = () => {
-  const navigate = useNavigate();
   const { notes, setUpdatingNote, setIsUpdating, onOpen } =
     useContext(AppContext);
 
@@ -20,13 +18,8 @@ const Dashboard = () => {
       await deleteDoc(doc(db, "notes", id));
     } catch (error) {
       toast.error("Please try again");
+      console.log(error);
     }
-  };
-
-  const handleLogout = async () => {
-    await signOut(auth);
-    navigate("/login");
-    toast.info("logged Out.");
   };
 
   return (
@@ -58,12 +51,7 @@ const Dashboard = () => {
           ))}
         </div>
 
-        <button
-          className="fixed bottom-10 right-5 sm:right-10 bg-danger px-4 py-2 rounded-xl"
-          onClick={handleLogout}
-        >
-          Logout
-        </button>
+        <LogoutBtn className="fixed bottom-10 right-5 sm:right-10 bg-danger px-4 py-2 rounded-xl"></LogoutBtn>
       </div>
       <Modal></Modal>
     </>

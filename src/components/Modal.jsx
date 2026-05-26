@@ -37,6 +37,7 @@ const Modal = () => {
       toast.success("Note Added Successfully");
     } catch (error) {
       toast.error("Please try again");
+      console.log(error);
     }
   };
 
@@ -51,6 +52,7 @@ const Modal = () => {
       toast.success("Note Updated Successfully");
     } catch (error) {
       toast.error("Please try again");
+      console.log(error);
     }
   };
 

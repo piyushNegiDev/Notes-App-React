@@ -3,17 +3,18 @@ import { toast } from "react-toastify";
 import { db } from "../../firebase";
 import { useNavigate } from "react-router-dom";
 
-export const useCURD = () => {
+export const useCRUD = () => {
   const navigate = useNavigate();
+
   const deleteNote = async (id) => {
     try {
       await deleteDoc(doc(db, "notes", id));
       navigate("/dashboard");
     } catch (error) {
       toast.error("Please try again");
+      console.log(error);
     }
   };
-
   const confirmDelete = (id) => {
     toast(
       ({ closeToast }) => (

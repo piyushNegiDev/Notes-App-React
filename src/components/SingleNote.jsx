@@ -7,15 +7,17 @@ import Header from "./Header";
 import Modal from "./Modal";
 import { MdDelete, MdUpdate } from "react-icons/md";
 import { AppContext } from "../context/AppContext";
-import { useCURD } from "../hooks/useCURD";
+import { useCRUD } from "../hooks/useCRUD";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { toast } from "react-toastify";
+import LogoutBtn from "./LogoutBtn";
 
 const SingleNote = () => {
   const navigate = useNavigate();
-  const { confirmDelete } = useCURD();
+  const { confirmDelete } = useCRUD();
   const { id } = useParams();
-  const { onOpen, setIsUpdating, setUpdatingNote } = useContext(AppContext);
+  const { onOpen, user, setIsUpdating, setUpdatingNote } =
+    useContext(AppContext);
   const [note, setNote] = useState(null);
 
   useEffect(() => {
@@ -32,11 +34,16 @@ const SingleNote = () => {
       return () => unsubscribe();
     } catch (error) {
       toast.error("Please try again");
+      console.log(error);
     }
   }, [id]);
 
   if (!note) {
     return <h1>Loading...</h1>;
+  }
+
+  if (note.userId !== user.uid) {
+    navigate("/dashboard");
   }
 
   return (
@@ -85,12 +92,8 @@ const SingleNote = () => {
               }}
             />
           </button>
-          <button
-            className="bg-danger px-4 py-2 rounded-xl"
-            //   onClick={handleLogout}
-          >
-            Logout
-          </button>
+
+          <LogoutBtn className="bg-danger px-4 py-2 rounded-xl"></LogoutBtn>
         </div>
       </div>
       <Modal></Modal>

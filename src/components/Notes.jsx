@@ -1,50 +1,13 @@
-import { toast } from "react-toastify";
 import { MdDelete } from "react-icons/md";
 import { MdUpdate } from "react-icons/md";
 import { GrView } from "react-icons/gr";
 import { useNavigate } from "react-router-dom";
+import { useCRUD } from "../hooks/useCRUD";
 
-const Notes = ({
-  note,
-  onOpen,
-  deleteNote,
-  setIsUpdating,
-  setUpdatingNote,
-}) => {
+const Notes = ({ note, onOpen, setIsUpdating, setUpdatingNote }) => {
   const navigate = useNavigate();
 
-  const confirmDelete = (id) => {
-    toast(
-      ({ closeToast }) => (
-        <div className="flex flex-col gap-3">
-          <p>Delete this note?</p>
-
-          <div className="flex gap-2">
-            <button
-              className="bg-red-500 text-white px-3 py-1 rounded"
-              onClick={async () => {
-                await deleteNote(id);
-
-                toast.success("Note deleted");
-
-                closeToast();
-              }}
-            >
-              Yes
-            </button>
-
-            <button className="border px-3 py-1 rounded" onClick={closeToast}>
-              Cancel
-            </button>
-          </div>
-        </div>
-      ),
-      {
-        autoClose: false,
-        closeOnClick: false,
-      },
-    );
-  };
+  const { confirmDelete } = useCRUD();
 
   return (
     <div className="bg-surface rounded-xl p-5">
@@ -54,7 +17,6 @@ const Notes = ({
       <div className="flex justify-between items-center">
         <p className="text-xs">{note.createdAt?.toDate().toLocaleString()}</p>
         <div className="flex gap-1 text-2xl">
-            
           <button
             className=""
             onClick={() => {
