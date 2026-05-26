@@ -1,16 +1,101 @@
-# React + Vite
+# SnapNotes
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+SnapNotes is a React notes application for creating, viewing, updating, and deleting personal notes. It uses Firebase Authentication for user accounts and Cloud Firestore for real-time note storage.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- User signup with name, email, password, and email verification
+- Login restricted to verified email accounts
+- Protected dashboard and single-note pages
+- Real-time note syncing from Firestore
+- Create notes with a title and content
+- Edit existing notes from the dashboard or note details page
+- Delete notes with confirmation prompts
+- View each note on its own detail page
+- Notes are scoped to the signed-in user's account
+- Notes are sorted by latest update
+- Light and dark theme toggle with local storage persistence
+- Toast notifications for auth and note actions
+- Responsive layout for desktop and mobile screens
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React
+- Vite
+- React Router
+- Firebase Authentication
+- Cloud Firestore
+- Formik
+- Yup
+- React Toastify
+- React Icons
+- Tailwind CSS
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Prerequisites
+
+- Node.js
+- npm
+- A Firebase project with Authentication and Firestore enabled
+
+### Installation
+
+```bash
+npm install
+```
+
+### Environment Variables
+
+Create a `.env` file in the project root and add your Firebase configuration:
+
+```env
+VITE_API_KEY=your_firebase_api_key
+VITE_AUTH_DOMAIN=your_project.firebaseapp.com
+VITE_PROJECT_ID=your_project_id
+VITE_STORAGE_BUCKET=your_project.appspot.com
+VITE_MESSAGING_SENDER_ID=your_messaging_sender_id
+VITE_APP_ID=your_firebase_app_id
+```
+
+### Run the App
+
+```bash
+npm run dev
+```
+
+### Build for Production
+
+```bash
+npm run build
+```
+
+### Preview Production Build
+
+```bash
+npm run preview
+```
+
+### Lint
+
+```bash
+npm run lint
+```
+
+## Project Structure
+
+```text
+src/
+  components/    Reusable UI components such as Header, Modal, Notes, and SingleNote
+  context/       Auth and app context providers/hooks
+  hooks/         App data and note delete helpers
+  pages/         Signup, Login, and Dashboard pages
+  routes/        Public and private route guards
+```
+
+## Main Routes
+
+- `/` - Signup page
+- `/login` - Login page
+- `/dashboard` - Protected notes dashboard
+- `/note/:id` - Protected single-note view
