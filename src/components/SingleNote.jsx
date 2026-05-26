@@ -1,7 +1,13 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { doc, onSnapshot } from "firebase/firestore";
+import {
+  collection,
+  documentId,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
 import { db } from "../../firebase";
 import Header from "./Header";
 import Modal from "./Modal";
@@ -19,31 +25,62 @@ const SingleNote = () => {
   const { onOpen, user, setIsUpdating, setUpdatingNote } =
     useContext(AppContext);
   const [note, setNote] = useState(null);
+  const [status, setStatus] = useState("loading");
 
   useEffect(() => {
-    try {
-      const noteRef = doc(db, "notes", id);
+    if (!user || !id) return;
 
-      const unsubscribe = onSnapshot(noteRef, (snapshot) => {
+    const noteQuery = query(
+      collection(db, "notes"),
+      where(documentId(), "==", id),
+      where("userId", "==", user.uid),
+    );
+
+    const unsubscribe = onSnapshot(
+      noteQuery,
+      (snapshot) => {
+        if (snapshot.empty) {
+          setNote(null);
+          setStatus("not-found");
+          return;
+        }
+
+        const noteDoc = snapshot.docs[0];
+
         setNote({
-          id: snapshot.id,
-          ...snapshot.data(),
+          id: noteDoc.id,
+          ...noteDoc.data(),
         });
-      });
 
-      return () => unsubscribe();
-    } catch (error) {
-      toast.error("Please try again");
-      console.log(error);
+        setStatus("success");
+      },
+      (error) => {
+        console.log(error);
+        toast.error("Please try again");
+        setStatus("error");
+      },
+    );
+
+    return () => unsubscribe();
+  }, [id, user]);
+
+  useEffect(() => {
+    if (status === "not-found") {
+      toast.error("Note not found or you do not have access");
+      navigate("/dashboard");
     }
-  }, [id]);
+  }, [status, navigate]);
 
-  if (!note) {
+  if (status === "loading" || note?.id !== id) {
     return <h1>Loading...</h1>;
   }
 
-  if (note.userId !== user.uid) {
-    navigate("/dashboard");
+  if (status === "error") {
+    return <h1>Something went wrong.</h1>;
+  }
+
+  if (!note) {
+    return null;
   }
 
   return (
