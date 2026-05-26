@@ -25,7 +25,7 @@ const SingleNote = () => {
   const { onOpen, user, setIsUpdating, setUpdatingNote } =
     useContext(AppContext);
   const [note, setNote] = useState(null);
-  const [status, setStatus] = useState("loading");
+  const [status, setStatus] = useState({ type: "loading", noteId: null });
 
   useEffect(() => {
     if (!user || !id) return;
@@ -41,7 +41,7 @@ const SingleNote = () => {
       (snapshot) => {
         if (snapshot.empty) {
           setNote(null);
-          setStatus("not-found");
+          setStatus({ type: "not-found", noteId: id });
           return;
         }
 
@@ -52,12 +52,12 @@ const SingleNote = () => {
           ...noteDoc.data(),
         });
 
-        setStatus("success");
+        setStatus({ type: "success", noteId: id });
       },
       (error) => {
         console.log(error);
         toast.error("Please try again");
-        setStatus("error");
+        setStatus({ type: "error", noteId: id });
       },
     );
 
@@ -65,17 +65,19 @@ const SingleNote = () => {
   }, [id, user]);
 
   useEffect(() => {
-    if (status === "not-found") {
+    if (status.type === "not-found" && status.noteId === id) {
       toast.error("Note not found or you do not have access");
       navigate("/dashboard");
     }
-  }, [status, navigate]);
+  }, [status, id, navigate]);
 
-  if (status === "loading" || note?.id !== id) {
+  const isCurrentRouteStatus = status.noteId === id;
+
+  if (!isCurrentRouteStatus || status.type === "loading") {
     return <h1>Loading...</h1>;
   }
 
-  if (status === "error") {
+  if (status.type === "error") {
     return <h1>Something went wrong.</h1>;
   }
 
@@ -88,9 +90,7 @@ const SingleNote = () => {
       <div className="text-text space-y-8">
         <Header></Header>
         <div className="bg-surface rounded-xl p-5">
-          <h1 onClick={() => {}} className="text-4xl font-bold">
-            {note.title}
-          </h1>
+          <h1 className="text-4xl font-bold">{note.title}</h1>
 
           <p className="mt-5 text-lg">{note.content}</p>
 
