@@ -9,6 +9,7 @@ import { MdDelete, MdUpdate } from "react-icons/md";
 import { AppContext } from "../context/AppContext";
 import { useCURD } from "../hooks/useCURD";
 import { IoMdArrowRoundBack } from "react-icons/io";
+import { toast } from "react-toastify";
 
 const SingleNote = () => {
   const navigate = useNavigate();
@@ -30,15 +31,13 @@ const SingleNote = () => {
 
       return () => unsubscribe();
     } catch (error) {
-      console.log(error.message);
+      toast.error("Please try again");
     }
   }, [id]);
 
   if (!note) {
     return <h1>Loading...</h1>;
   }
-
-  console.log(note);
 
   return (
     <>
@@ -78,7 +77,7 @@ const SingleNote = () => {
             </div>
           </div>
         </div>
-        <div className="fixed bottom-10 right-10 flex gap-5">
+        <div className="fixed bottom-10 right-5 sm:right-10 flex gap-5">
           <button className="text-xl">
             <IoMdArrowRoundBack
               onClick={() => {

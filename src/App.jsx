@@ -15,7 +15,7 @@ const App = () => {
   return (
     <>
       <AppContext.Provider value={appData}>
-        <div className="bg-bg min-h-screen p-10 pt-8 transition-all">
+        <div className="bg-bg min-h-screen p-5 sm:p-10 pt-8 transition-all">
           <Routes>
             <Route
               index
@@ -41,7 +41,14 @@ const App = () => {
                 </PrivateRoute>
               }
             />
-            <Route path="/note/:id" element={<SingleNote />} />
+            <Route
+              path="/note/:id"
+              element={
+                <PrivateRoute>
+                  <SingleNote />
+                </PrivateRoute>
+              }
+            />
           </Routes>
         </div>
       </AppContext.Provider>

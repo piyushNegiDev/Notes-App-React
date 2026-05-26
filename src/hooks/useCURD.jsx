@@ -10,7 +10,7 @@ export const useCURD = () => {
       await deleteDoc(doc(db, "notes", id));
       navigate("/dashboard");
     } catch (error) {
-      console.log(error.message);
+      toast.error("Please try again");
     }
   };
 

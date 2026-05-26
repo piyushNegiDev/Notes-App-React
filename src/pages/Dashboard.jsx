@@ -8,6 +8,7 @@ import Notes from "../components/Notes";
 import ZeroNotesMessage from "../components/ZeroNotesMessage";
 import Header from "../components/Header";
 import { AppContext } from "../context/AppContext";
+import { toast } from "react-toastify";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -18,13 +19,14 @@ const Dashboard = () => {
     try {
       await deleteDoc(doc(db, "notes", id));
     } catch (error) {
-      console.log(error.message);
+      toast.error("Please try again");
     }
   };
 
   const handleLogout = async () => {
     await signOut(auth);
     navigate("/login");
+    toast.info("logged Out.");
   };
 
   return (
@@ -43,7 +45,7 @@ const Dashboard = () => {
           )}
         </div>
 
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-5">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-5">
           {notes?.map((note) => (
             <Notes
               key={note.id}
@@ -57,7 +59,7 @@ const Dashboard = () => {
         </div>
 
         <button
-          className="fixed bottom-10 right-10 bg-danger px-4 py-2 rounded-xl"
+          className="fixed bottom-10 right-5 sm:right-10 bg-danger px-4 py-2 rounded-xl"
           onClick={handleLogout}
         >
           Logout

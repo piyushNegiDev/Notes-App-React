@@ -8,6 +8,7 @@ import { auth } from "../../firebase";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
+import { toast } from "react-toastify";
 
 const noteDataValidation = Yup.object().shape({
   name: Yup.string().required("Name is Required"),
@@ -19,6 +20,7 @@ const noteDataValidation = Yup.object().shape({
 
 const Signup = () => {
   const navigate = useNavigate();
+
   const handleSignup = async ({ name, email, password }) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(
@@ -36,14 +38,14 @@ const Signup = () => {
       // Logout unverified user
       await signOut(auth);
 
-      alert(
+      toast.info(
         "Account created successfully. Please verify your email before logging in.",
       );
 
       navigate("/login");
     } catch (error) {
       if (error.code === "auth/email-already-in-use") {
-        alert("Email already exists");
+        toast.error("Email already exists");
       }
     }
   };

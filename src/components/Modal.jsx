@@ -36,7 +36,7 @@ const Modal = () => {
       onClose();
       toast.success("Note Added Successfully");
     } catch (error) {
-      console.log(error.message);
+      toast.error("Please try again");
     }
   };
 
@@ -50,14 +50,14 @@ const Modal = () => {
       onClose();
       toast.success("Note Updated Successfully");
     } catch (error) {
-      console.log(error.message);
+      toast.error("Please try again");
     }
   };
 
   return createPortal(
     <>
       {isOpen && (
-        <div className="text-text fixed inset-0 backdrop-blur-sm flex items-center">
+        <div className="px-5 sm:px-10 text-text fixed inset-0 backdrop-blur-sm flex items-center">
           <Formik
             validationSchema={noteDataValidation}
             initialValues={
