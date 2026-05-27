@@ -96,7 +96,7 @@ const SingleNote = () => {
 
           <div className="flex mt-15 justify-between items-center">
             <p className="text-sm">
-              {note.createdAt?.toDate().toLocaleString()}
+              {note.updatedAt?.toDate().toLocaleString()}
             </p>
 
             <div className="flex gap-5 text-2xl">

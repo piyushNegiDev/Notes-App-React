@@ -61,6 +61,7 @@ const Modal = () => {
       {isOpen && (
         <div className="px-5 sm:px-10 text-text fixed inset-0 backdrop-blur-sm flex items-center">
           <Formik
+            enableReinitialize={true}
             validationSchema={noteDataValidation}
             initialValues={
               isUpdating
