@@ -12,6 +12,8 @@ SnapNotes is a React notes application for creating, viewing, updating, and dele
 - Edit existing notes from the dashboard or note details page
 - Delete notes with confirmation prompts
 - View each note on its own detail page
+- Search notes by title or content from the dashboard
+- Filter notes by their latest updated date
 - Notes are scoped to the signed-in user's account
 - Notes are sorted by latest update
 - Light and dark theme toggle with local storage persistence
@@ -81,6 +83,10 @@ npm run preview
 ```bash
 npm run lint
 ```
+
+## Search Notes
+
+Use the search bar on the dashboard to find notes by matching text in the note title or content. You can also choose a date to show notes updated on that day, or combine text search and date filtering for narrower results.
 
 ## Project Structure
 
