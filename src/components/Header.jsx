@@ -103,7 +103,7 @@ const Header = () => {
         </div>
       </header>
 
-      <div className="relative flex border rounded-xl pl-8 py-2 pr-1">
+      <div className="relative flex border rounded-xl pl-11 py-2 pr-1">
         <CiSearch className="absolute top-1.5 left-1 text-4xl" />
 
         <input
