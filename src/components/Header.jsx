@@ -7,10 +7,11 @@ import { useNavigate } from "react-router-dom";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../config/firebase";
 import { CiSearch } from "react-icons/ci";
+import ThemeContext from "../context/ThemeContext";
 
 const Header = () => {
-  const { setNotes, user, onOpen, setIsUpdating, theme, toggleTheme } =
-    useContext(AppContext);
+  const { setNotes, user, onOpen, setIsUpdating } = useContext(AppContext);
+  const { theme, toggleTheme } = useContext(ThemeContext);
   const navigate = useNavigate();
   const [inputValue, setInputValue] = useState("");
   const [dateValue, setDateValue] = useState("");

@@ -15,21 +15,6 @@ export function useAppData() {
   const [isOpen, setIsOpen] = useState(false);
   const [updatingNote, setUpdatingNote] = useState("");
   const [isUpdating, setIsUpdating] = useState(false);
-  const [theme, setTheme] = useState(() => {
-    return localStorage.getItem("theme") || "light";
-  });
-
-  useEffect(() => {
-    const root = document.documentElement;
-
-    if (theme === "dark") {
-      root.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
-    }
-
-    localStorage.setItem("theme", theme);
-  }, [theme]);
 
   useEffect(() => {
     if (!user) return;
@@ -60,10 +45,6 @@ export function useAppData() {
     setIsOpen(false);
   };
 
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === "light" ? "dark" : "light"));
-  };
-
   return {
     user,
     notes,
@@ -76,7 +57,5 @@ export function useAppData() {
     setIsUpdating,
     onOpen,
     onClose,
-    theme,
-    toggleTheme,
   };
 }

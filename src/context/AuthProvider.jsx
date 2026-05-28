@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import AuthContext from "./AuthContext";
 import { auth } from "../config/firebase";
+import { OrbitProgress } from "react-loading-indicators";
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -18,7 +19,11 @@ const AuthProvider = ({ children }) => {
   }, []);
 
   if (loading) {
-    return <h1>Loading...</h1>;
+    return (
+      <div className="h-screen w-screen bg-bg flex justify-center items-center">
+        <OrbitProgress color="#818cf8" size="medium" text="" textColor="" />
+      </div>
+    );
   }
 
   return (

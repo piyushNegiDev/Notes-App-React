@@ -74,7 +74,7 @@ const SingleNote = () => {
   const isCurrentRouteStatus = status.noteId === id;
 
   if (!isCurrentRouteStatus || status.type === "loading") {
-    return <h1>Loading...</h1>;
+    return null;
   }
 
   if (status.type === "error") {
