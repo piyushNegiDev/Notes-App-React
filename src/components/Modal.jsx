@@ -13,6 +13,7 @@ import * as Yup from "yup";
 import { toast } from "react-toastify";
 import { AppContext } from "../context/AppContext";
 import { useContext } from "react";
+import AnimatedButton from "./AnimatedButton";
 
 const Modal = () => {
   const { isOpen, onClose, user, isUpdating, updatingNote } =
@@ -116,9 +117,12 @@ const Modal = () => {
                 </div>
               </div>
 
-              <button type="submit" className="self-end border px-4 py-2">
+              <AnimatedButton
+                type={"submit"}
+                className={"self-end border px-4 py-2"}
+              >
                 Save Note
-              </button>
+              </AnimatedButton>
             </Form>
           </Formik>
         </div>

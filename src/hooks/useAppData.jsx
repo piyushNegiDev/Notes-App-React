@@ -15,6 +15,7 @@ export function useAppData() {
   const [isOpen, setIsOpen] = useState(false);
   const [updatingNote, setUpdatingNote] = useState("");
   const [isUpdating, setIsUpdating] = useState(false);
+  const [notesLoading, setNotesLoading] = useState(true);
 
   useEffect(() => {
     if (!user) return;
@@ -32,6 +33,7 @@ export function useAppData() {
       }));
 
       setNotes(notesData);
+      setNotesLoading(false);
     });
 
     return () => unsubscribe();
@@ -49,6 +51,7 @@ export function useAppData() {
     user,
     notes,
     setNotes,
+    notesLoading,
     isOpen,
     setIsOpen,
     updatingNote,

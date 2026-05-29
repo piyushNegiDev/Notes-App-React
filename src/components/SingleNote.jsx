@@ -17,6 +17,8 @@ import { IoMdArrowRoundBack } from "react-icons/io";
 import { toast } from "react-toastify";
 import LogoutBtn from "./LogoutBtn";
 import { db } from "../config/firebase";
+import AnimatedButton from "./AnimatedButton";
+import { motion } from "motion/react";
 
 const SingleNote = () => {
   const navigate = useNavigate();
@@ -89,7 +91,12 @@ const SingleNote = () => {
     <>
       <div className="text-text space-y-8">
         <Header></Header>
-        <div className="bg-surface rounded-xl p-5">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, ease: "easeIn" }}
+          className="bg-surface rounded-xl p-5"
+        >
           <h1 className="text-4xl font-bold">{note.title}</h1>
 
           <p className="mt-5 text-lg">{note.content}</p>
@@ -100,16 +107,14 @@ const SingleNote = () => {
             </p>
 
             <div className="flex gap-5 text-2xl">
-              <button
-                className=""
+              <AnimatedButton
                 onClick={() => {
                   confirmDelete(note.id);
                 }}
               >
                 <MdDelete />
-              </button>
-              <button
-                className=""
+              </AnimatedButton>
+              <AnimatedButton
                 onClick={() => {
                   onOpen();
                   setIsUpdating(true);
@@ -117,18 +122,18 @@ const SingleNote = () => {
                 }}
               >
                 <MdUpdate />
-              </button>
+              </AnimatedButton>
             </div>
           </div>
-        </div>
+        </motion.div>
         <div className="fixed bottom-10 right-5 sm:right-10 flex gap-5">
-          <button className="text-xl">
+          <AnimatedButton className={"text-xl"}>
             <IoMdArrowRoundBack
               onClick={() => {
                 navigate("/dashboard");
               }}
             />
-          </button>
+          </AnimatedButton>
 
           <LogoutBtn className="bg-danger px-4 py-2 rounded-xl"></LogoutBtn>
         </div>

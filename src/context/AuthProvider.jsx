@@ -20,8 +20,13 @@ const AuthProvider = ({ children }) => {
 
   if (loading) {
     return (
-      <div className="h-screen w-screen bg-bg flex justify-center items-center">
-        <OrbitProgress color="#818cf8" size="medium" text="" textColor="" />
+      <div className="h-screen w-screen bg-bg flex justify-center items-center ">
+        <OrbitProgress
+          color="var(--color-primary)"
+          size="medium"
+          text=""
+          textColor=""
+        />
       </div>
     );
   }

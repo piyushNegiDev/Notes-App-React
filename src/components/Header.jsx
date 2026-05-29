@@ -8,6 +8,7 @@ import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../config/firebase";
 import { CiSearch } from "react-icons/ci";
 import ThemeContext from "../context/ThemeContext";
+import AnimatedButton from "./AnimatedButton";
 
 const Header = () => {
   const { setNotes, user, onOpen, setIsUpdating } = useContext(AppContext);
@@ -81,25 +82,29 @@ const Header = () => {
             <FaUserAlt className="" />
             <span className="hidden md:block text-md">{user.displayName}</span>
           </span>
-          <button
+
+          <AnimatedButton
+            className={
+              "flex items-center gap-1 px-4 text-xl rounded-xl text-white bg-primary"
+            }
             onClick={() => {
               setIsUpdating(false);
               onOpen();
             }}
-            className="flex items-center gap-1 px-4 text-xl rounded-xl text-white bg-primary"
           >
             + <span className="md:block hidden">Add Note</span>
-          </button>
-          <button
+          </AnimatedButton>
+
+          <AnimatedButton
+            className={"text-3xl sm:text-5xl border p-1 rounded-xl"}
             onClick={toggleTheme}
-            className="text-3xl sm:text-5xl border p-1 rounded-xl"
           >
             {theme === "dark" ? (
               <WiDaySunny className="" />
             ) : (
               <MdModeNight className="" />
             )}
-          </button>
+          </AnimatedButton>
         </div>
       </header>
 

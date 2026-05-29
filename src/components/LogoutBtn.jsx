@@ -2,6 +2,7 @@ import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { auth } from "../config/firebase";
+import AnimatedButton from "./AnimatedButton";
 
 const LogoutBtn = ({ className }) => {
   const navigate = useNavigate();
@@ -13,9 +14,9 @@ const LogoutBtn = ({ className }) => {
   };
 
   return (
-    <button className={className} onClick={handleLogout}>
+    <AnimatedButton className={className} onClick={handleLogout}>
       Logout
-    </button>
+    </AnimatedButton>
   );
 };
 
