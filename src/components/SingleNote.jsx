@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-
 import {
   collection,
   documentId,
@@ -19,6 +18,43 @@ import LogoutBtn from "./LogoutBtn";
 import { db } from "../config/firebase";
 import AnimatedButton from "./AnimatedButton";
 import { motion } from "motion/react";
+
+const container = {
+  hidden: {
+    opacity: 0,
+    y: 20,
+  },
+
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.15,
+    },
+  },
+
+  //   hover: {
+  //     scale: 1.05,
+  //     transition: {
+  //       type: "spring",
+  //       stiffness: 300,
+  //       damping: 15,
+  //     },
+  //   },
+};
+
+const item = {
+  hidden: {
+    opacity: 0,
+    y: 20,
+  },
+
+  visible: {
+    opacity: 1,
+    y: 0,
+  },
+};
 
 const SingleNote = () => {
   const navigate = useNavigate();
@@ -92,16 +128,23 @@ const SingleNote = () => {
       <div className="text-text space-y-8">
         <Header></Header>
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6, ease: "easeIn" }}
+          variants={container}
+          initial="hidden"
+          animate="visible"
           className="bg-surface rounded-xl p-5"
         >
-          <h1 className="text-4xl font-bold">{note.title}</h1>
+          <motion.h1 variants={item} className="text-4xl font-bold">
+            {note.title}
+          </motion.h1>
 
-          <p className="mt-5 text-lg">{note.content}</p>
+          <motion.p variants={item} className="mt-5 text-lg">
+            {note.content}
+          </motion.p>
 
-          <div className="flex mt-15 justify-between items-center">
+          <motion.div
+            variants={item}
+            className="flex mt-15 justify-between items-center"
+          >
             <p className="text-sm">
               {note.updatedAt?.toDate().toLocaleString()}
             </p>
@@ -124,7 +167,7 @@ const SingleNote = () => {
                 <MdUpdate />
               </AnimatedButton>
             </div>
-          </div>
+          </motion.div>
         </motion.div>
         <div className="fixed bottom-10 right-5 sm:right-10 flex gap-5">
           <AnimatedButton className={"text-xl"}>
@@ -135,7 +178,7 @@ const SingleNote = () => {
             />
           </AnimatedButton>
 
-          <LogoutBtn className="bg-danger px-4 py-2 rounded-xl"></LogoutBtn>
+          <LogoutBtn className="bg-danger text-white px-4 py-2 rounded-xl"></LogoutBtn>
         </div>
       </div>
       <Modal></Modal>

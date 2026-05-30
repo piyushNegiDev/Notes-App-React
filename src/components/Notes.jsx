@@ -6,6 +6,43 @@ import { useCRUD } from "../hooks/useCRUD";
 import { motion } from "motion/react";
 import AnimatedButton from "./AnimatedButton";
 
+const container = {
+  hidden: {
+    opacity: 0,
+    y: 20,
+  },
+
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.15,
+    },
+  },
+
+  hover: {
+    scale: 1.05,
+    transition: {
+      type: "spring",
+      stiffness: 300,
+      damping: 15,
+    },
+  },
+};
+
+const item = {
+  hidden: {
+    opacity: 0,
+    y: 20,
+  },
+
+  visible: {
+    opacity: 1,
+    y: 0,
+  },
+};
+
 const Notes = ({ note, onOpen, setIsUpdating, setUpdatingNote }) => {
   const navigate = useNavigate();
 
@@ -13,33 +50,20 @@ const Notes = ({ note, onOpen, setIsUpdating, setUpdatingNote }) => {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{
-        opacity: {
-          delay: 0.6,
-          duration: 0.3,
-        },
-        y: {
-          delay: 0.6,
-          duration: 0.3,
-        },
-      }}
-      whileHover={{
-        scale: 1.05,
-        transition: {
-          duration: 0.1,
-          type: "spring",
-          stiffness: 300,
-          damping: 15,
-        },
-      }}
+      variants={container}
+      initial="hidden"
+      animate="visible"
+      whileHover="hover"
       className="bg-surface rounded-xl p-5"
     >
-      <p className="text-2xl mb-5  truncate">{note.title}</p>
-      <p className="mb-10  truncate">{note.content}</p>
+      <motion.p variants={item} className="text-2xl mb-5  truncate">
+        {note.title}
+      </motion.p>
+      <motion.p variants={item} className="mb-10  truncate">
+        {note.content}
+      </motion.p>
 
-      <div className="flex justify-between items-center">
+      <motion.div variants={item} className="flex justify-between items-center">
         <p className="text-xs">{note.createdAt?.toDate().toLocaleString()}</p>
         <div className="flex gap-1 text-2xl">
           <AnimatedButton
@@ -67,7 +91,7 @@ const Notes = ({ note, onOpen, setIsUpdating, setUpdatingNote }) => {
             <GrView />
           </AnimatedButton>
         </div>
-      </div>
+      </motion.div>
     </motion.div>
   );
 };

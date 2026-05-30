@@ -36,7 +36,7 @@ const Dashboard = () => {
           </div>
         )}
 
-        <LogoutBtn className="fixed bottom-10 right-5 sm:right-10 bg-danger px-4 py-2 rounded-xl"></LogoutBtn>
+        <LogoutBtn className="fixed bottom-10 right-5 sm:right-10 bg-danger text-white px-4 py-2 rounded-xl"></LogoutBtn>
       </div>
       <Modal></Modal>
     </>

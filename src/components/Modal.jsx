@@ -97,7 +97,7 @@ const Modal = () => {
                   placeholder="Enter note title..."
                   type="text"
                   name="title"
-                  className="border pl-4 py-2"
+                  className="border pl-4 py-2 rounded-lg"
                 />
                 <div className="text-red-500 text-xs absolute -bottom-4">
                   <ErrorMessage name="title" />
@@ -110,7 +110,7 @@ const Modal = () => {
                   placeholder="Write your note here..."
                   as="textarea"
                   name="content"
-                  className="border pl-4 py-2"
+                  className="border pl-4 py-2 rounded-lg"
                 />
                 <div className="text-red-500 text-xs absolute -bottom-4">
                   <ErrorMessage name="content" />
@@ -119,7 +119,7 @@ const Modal = () => {
 
               <AnimatedButton
                 type={"submit"}
-                className={"self-end border px-4 py-2"}
+                className={"self-end bg-primary text-white px-4 py-2 rounded-lg"}
               >
                 Save Note
               </AnimatedButton>
