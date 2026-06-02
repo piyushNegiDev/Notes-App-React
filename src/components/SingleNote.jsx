@@ -137,7 +137,10 @@ const SingleNote = () => {
             {note.title}
           </motion.h1>
 
-          <motion.p variants={item} className="mt-5 text-lg">
+          <motion.p
+            variants={item}
+            className="mt-5 text-lg whitespace-pre-wrap"
+          >
             {note.content}
           </motion.p>
 

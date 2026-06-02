@@ -8,6 +8,7 @@ import SingleNote from "./components/SingleNote";
 import { AppContext } from "./context/AppContext";
 import { useAppData } from "./hooks/useAppData";
 import { ToastContainer } from "react-toastify";
+import ForgotPassword from "./components/ForgotPassword";
 
 const App = () => {
   const appData = useAppData();
@@ -49,6 +50,7 @@ const App = () => {
                 </PrivateRoute>
               }
             />
+            <Route path="forgot-password" element={<ForgotPassword />} />
           </Routes>
         </div>
       </AppContext.Provider>

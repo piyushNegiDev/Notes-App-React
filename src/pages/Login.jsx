@@ -1,10 +1,15 @@
 import { ErrorMessage, Field, Formik, Form } from "formik";
 import * as Yup from "yup";
-import { signInWithEmailAndPassword, signOut } from "firebase/auth";
+import {
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+  signOut,
+} from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { auth } from "../config/firebase";
+import AnimatedButton from "../components/AnimatedButton";
 
 const contactSchemValidation = Yup.object().shape({
   email: Yup.string().email("Invalid Email").required("Email is Required"),
@@ -106,21 +111,29 @@ const Login = () => {
               </div>
             </div>
 
-            <button
+            <AnimatedButton
               disabled={loading}
-              type="submit"
-              className="rounded-lg border px-3 py-1.5"
+              type={"submit"}
+              className={"rounded-lg border px-3 py-1.5"}
             >
               {loading ? "Loading..." : "Log in"}
-            </button>
+            </AnimatedButton>
 
-            <button
-              type="button"
+            <AnimatedButton
+              onClick={() => navigate("/forgot-password")}
+              type={"button"}
+              className={"rounded-lg border px-3 py-1.5"}
+            >
+              Forget Passoword ?
+            </AnimatedButton>
+
+            <AnimatedButton
+              type={"button"}
               onClick={navigateToSignUp}
-              className="rounded-lg border px-3 py-1.5"
+              className={"rounded-lg border px-3 py-1.5"}
             >
               Create new account
-            </button>
+            </AnimatedButton>
           </Form>
         </Formik>
       </div>
