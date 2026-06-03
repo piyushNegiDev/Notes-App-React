@@ -5,8 +5,9 @@ import { ErrorMessage, Field, Formik, Form } from "formik";
 import { useNavigate } from "react-router-dom";
 import AnimatedButton from "./AnimatedButton";
 import * as Yup from "yup";
+import { toast } from "react-toastify";
 
-const detailsSchemValidation = Yup.object().shape({
+const noteDataValidation = Yup.object().shape({
   email: Yup.string().email("Invalid Email").required("Email is Required"),
 });
 
@@ -19,9 +20,24 @@ const ForgotPassword = () => {
       setLoading(true);
       await sendPasswordResetEmail(auth, email);
 
-      alert("Password reset link sent");
+      toast.success(
+        "If an account exists for this email, a password reset link has been sent.",
+      );
     } catch (error) {
-      alert(error.message);
+      console.log(error.code);
+
+      switch (error.code) {
+        case "auth/user-not-found":
+          toast.error("No account found with this email");
+          break;
+
+        case "auth/invalid-email":
+          toast.error("Invalid email address");
+          break;
+
+        default:
+          toast.error("Something went wrong");
+      }
     } finally {
       setLoading(false);
     }
@@ -37,7 +53,7 @@ const ForgotPassword = () => {
           <img className="rounded-xl" src="/notes-image.avif" alt="" />
         </div>
         <Formik
-          validationSchema={detailsSchemValidation}
+          validationSchema={noteDataValidation}
           initialValues={{
             email: "",
           }}

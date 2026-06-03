@@ -9,6 +9,9 @@ import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import { auth } from "../config/firebase";
+import AnimatedButton from "../components/AnimatedButton";
+import { useState } from "react";
+import ShowPassword from "../components/ShowPassword";
 
 const noteDataValidation = Yup.object().shape({
   name: Yup.string().required("Name is Required"),
@@ -20,6 +23,7 @@ const noteDataValidation = Yup.object().shape({
 
 const Signup = () => {
   const navigate = useNavigate();
+  const [showPass, setShowPass] = useState(false);
 
   const handleSignup = async ({ name, email, password }) => {
     try {
@@ -111,29 +115,35 @@ const Signup = () => {
               </label>
               <Field
                 placeholder="********"
-                type="password"
+                type={showPass ? "text" : "password"}
                 name="password"
                 className="h-10 rounded-lg border px-3"
               />
+
+              <ShowPassword
+                showPass={showPass}
+                setShowPass={setShowPass}
+              ></ShowPassword>
+
               <div className="text-xs text-red-500 absolute -bottom-4">
                 <ErrorMessage name="password" />
               </div>
             </div>
 
-            <button
-              type="submit"
-              className="text-text rounded-lg border px-3 py-1.5"
+            <AnimatedButton
+              type={"submit"}
+              className={"text-text rounded-lg border px-3 py-1.5"}
             >
               Create new account
-            </button>
+            </AnimatedButton>
 
-            <button
-              type="button"
+            <AnimatedButton
+              type={"button"}
               onClick={navigateToLogin}
-              className="text-text rounded-lg border px-3 py-1.5"
+              className={"text-text rounded-lg border px-3 py-1.5"}
             >
               Log in
-            </button>
+            </AnimatedButton>
           </Form>
         </Formik>
       </div>

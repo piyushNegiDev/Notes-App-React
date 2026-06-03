@@ -6,8 +6,9 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { auth } from "../config/firebase";
 import AnimatedButton from "../components/AnimatedButton";
+import ShowPassword from "../components/ShowPassword";
 
-const detailsSchemValidation = Yup.object().shape({
+const noteDataValidation = Yup.object().shape({
   email: Yup.string().email("Invalid Email").required("Email is Required"),
   password: Yup.string()
     .required("Password is required")
@@ -16,6 +17,7 @@ const detailsSchemValidation = Yup.object().shape({
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
+  const [showPass, setShowPass] = useState(false);
   const navigate = useNavigate();
 
   const navigateToSignUp = () => {
@@ -67,7 +69,7 @@ const Login = () => {
           <img className="rounded-xl" src="/notes-image.avif" alt="" />
         </div>
         <Formik
-          validationSchema={detailsSchemValidation}
+          validationSchema={noteDataValidation}
           initialValues={{
             email: "",
             password: "",
@@ -98,10 +100,16 @@ const Login = () => {
               </label>
               <Field
                 placeholder="********"
-                type="password"
+                type={showPass ? "text" : "password"}
                 name="password"
-                className="h-10 rounded-lg border px-3"
+                className="h-10 rounded-lg border px-3 pr-10"
               />
+
+              <ShowPassword
+                showPass={showPass}
+                setShowPass={setShowPass}
+              ></ShowPassword>
+
               <div className="text-xs text-red-500 absolute -bottom-4">
                 <ErrorMessage name="password" />
               </div>

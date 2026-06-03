@@ -16,7 +16,7 @@ const App = () => {
   return (
     <>
       <AppContext.Provider value={appData}>
-        <div className="bg-bg min-h-screen p-5 sm:p-10 pt-8 transition-all">
+        <div className="bg-bg min-h-screen p-5 sm:px-10 sm:pt-10 sm:pb-5 pt-8 transition-all">
           <Routes>
             <Route
               index
