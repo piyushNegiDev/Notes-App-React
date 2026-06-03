@@ -1,17 +1,13 @@
 import { ErrorMessage, Field, Formik, Form } from "formik";
 import * as Yup from "yup";
-import {
-  sendPasswordResetEmail,
-  signInWithEmailAndPassword,
-  signOut,
-} from "firebase/auth";
+import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { auth } from "../config/firebase";
 import AnimatedButton from "../components/AnimatedButton";
 
-const contactSchemValidation = Yup.object().shape({
+const detailsSchemValidation = Yup.object().shape({
   email: Yup.string().email("Invalid Email").required("Email is Required"),
   password: Yup.string()
     .required("Password is required")
@@ -71,7 +67,7 @@ const Login = () => {
           <img className="rounded-xl" src="/notes-image.avif" alt="" />
         </div>
         <Formik
-          validationSchema={contactSchemValidation}
+          validationSchema={detailsSchemValidation}
           initialValues={{
             email: "",
             password: "",
