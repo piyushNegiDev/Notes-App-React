@@ -1,14 +1,14 @@
-import { Route, Routes, useLocation } from "react-router-dom";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import PrivateRoute from "./routes/PrivateRoute";
 import PublicRoute from "./routes/PublicRoute";
 import SingleNote from "./components/SingleNote";
+import ForgotPassword from "./components/ForgotPassword";
+import { Route, Routes, useLocation } from "react-router-dom";
 import { AppContext } from "./context/AppContext";
 import { useAppData } from "./hooks/useAppData";
 import { ToastContainer } from "react-toastify";
-import ForgotPassword from "./components/ForgotPassword";
 import { useIsMobile } from "./hooks/useIsMobile";
 import { AnimatePresence, easeOut } from "motion/react";
 import { motion } from "motion/react";
