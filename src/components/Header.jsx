@@ -4,7 +4,7 @@ import { MdModeNight } from "react-icons/md";
 import { AppContext } from "../context/AppContext";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { collection, onSnapshot } from "firebase/firestore";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "../config/firebase";
 import { CiSearch } from "react-icons/ci";
 import ThemeContext from "../context/ThemeContext";
@@ -19,51 +19,64 @@ const Header = () => {
   const dateInputRef = useRef(null);
 
   useEffect(() => {
-    const notesRef = collection(db, "notes");
-    const unsubscribe = onSnapshot(notesRef, (snapshot) => {
-      const notesList = snapshot.docs.map((doc) => {
-        return {
-          id: doc.id,
-          ...doc.data(),
-        };
-      });
+    if (!user?.uid) return;
 
-      if (!inputValue && !dateValue) {
-        setNotes(notesList);
-        return notesList;
-      }
+    const notesRef = query(
+      collection(db, "notes"),
+      where("userId", "==", user.uid),
+    );
+    const unsubscribe = onSnapshot(
+      notesRef,
+      (snapshot) => {
+        const notesList = snapshot.docs.map((doc) => {
+          return {
+            id: doc.id,
+            ...doc.data(),
+          };
+        });
 
-      const filteredNotes = notesList.filter((note) => {
-        const noteDate = note.updatedAt.toDate().toLocaleDateString();
-        const selectedDate = new Date(dateValue).toLocaleDateString();
-
-        if (inputValue && dateValue) {
-          return (
-            (note.title.toLowerCase().includes(inputValue.toLowerCase()) ||
-              note.content.toLowerCase().includes(inputValue.toLowerCase())) &&
-            noteDate === selectedDate
-          );
-        }
-        if (inputValue && !dateValue) {
-          return (
-            note.title.toLowerCase().includes(inputValue.toLowerCase()) ||
-            note.content.toLowerCase().includes(inputValue.toLowerCase())
-          );
-        }
-        if (!inputValue && dateValue) {
-          return noteDate === selectedDate;
+        if (!inputValue && !dateValue) {
+          setNotes(notesList);
+          return notesList;
         }
 
-        return true;
-      });
+        const filteredNotes = notesList.filter((note) => {
+          const noteDate = note.updatedAt.toDate().toLocaleDateString();
+          const selectedDate = new Date(dateValue).toLocaleDateString();
 
-      setNotes(filteredNotes);
+          if (inputValue && dateValue) {
+            return (
+              (note.title.toLowerCase().includes(inputValue.toLowerCase()) ||
+                note.content
+                  .toLowerCase()
+                  .includes(inputValue.toLowerCase())) &&
+              noteDate === selectedDate
+            );
+          }
+          if (inputValue && !dateValue) {
+            return (
+              note.title.toLowerCase().includes(inputValue.toLowerCase()) ||
+              note.content.toLowerCase().includes(inputValue.toLowerCase())
+            );
+          }
+          if (!inputValue && dateValue) {
+            return noteDate === selectedDate;
+          }
 
-      return filteredNotes;
-    });
+          return true;
+        });
+
+        setNotes(filteredNotes);
+
+        return filteredNotes;
+      },
+      (error) => {
+        console.error("Header notes listener failed:", error);
+      },
+    );
 
     return unsubscribe;
-  }, [inputValue, dateValue, setNotes]);
+  }, [inputValue, dateValue, setNotes, user]);
 
   return (
     <div className="flex flex-col gap-5">
